@@ -1,6 +1,8 @@
 library(tidyverse)
 library(Lahman)
 library(baseballr)
+library(teamcolors)
+
 df_action <- read_csv('df_action.csv')
 df_action %>% filter(Sport == 'Baseball')
 action_dur <- df_action %>% filter(Sport == 'Baseball') %>% 
@@ -28,5 +30,36 @@ df_prices %>% ggplot() +
                y=pr_2011/action_dur_min),
            stat='identity') +
   coord_flip()
-# Make interactive, switch from 2011 to 2017
-# Tooltip to show actual prices
+
+teamcolors[teamcolors$name=='Arizona Diamondbacks', 1] <- 'Arizona D-backs'
+teamcolors[teamcolors$name=='Los Angeles Angels of Anaheim', 1] <- 'Los Angeles Angels'
+
+mlb_colors <- teamcolors %>% filter(league=='mlb')
+fillscale <- scale_fill_manual(name='Teams',
+                               values=mlb_colors$primary)
+
+g <- df_prices %>%
+  select(Team=teams,
+         pr_2017) %>% 
+  mutate(Ratio=action_dur_min/pr_2017,
+         Price=paste('$',
+                     as.character(pr_2017),
+                     sep='')) %>% 
+  ggplot(aes(label=Price)) +
+  geom_bar(aes(x=reorder(Team, Ratio),
+               y=Ratio,
+               fill=Team),
+           stat='identity') +
+  fillscale +
+  xlab('') +
+  ylab('Ratio of minutes of action to ticket price') +
+  ggtitle('Which teams have the best ROI?') +
+  coord_flip() +
+  theme_eric()
+g
+ggplotly(g, tooltip=c('Team', 'Ratio', 'Price'))
+
+# Make interactive, switch from 2011 to 2017, in shiny
+df_prices %>%
+  gather(key=key, value=value,
+         -c(teams, perc_change))
