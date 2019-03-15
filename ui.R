@@ -17,8 +17,8 @@ df <- df_prices %>% select(-Division) %>%
 
 # Merge with location data
 df_merge <- merge(x=df, y=df_stadiums,
-      by.x='Teams', by.y='Team',
-      all.x=T)
+                  by.x='Teams', by.y='Team',
+                  all.x=T)
 # Temp turn year into num
 df_merge <- df_merge %>% filter(year!='2001A')
 df_merge$year <- df_merge$year %>% as.numeric()
@@ -107,8 +107,8 @@ df_merge$popup[df_merge$Teams=='Tampa Bay Rays' & df_merge$year<2008] <- 'Tampa 
 df_leaflet <- df_merge %>% 
   select(Teams, price, year, Latitude, Longitude, Team_names_hist=popup) %>% 
   mutate(popup_p=paste(Team_names_hist,
-                     as.character(year),
-                     sep=' '),
+                       as.character(year),
+                       sep=' '),
          popup=paste(popup_p,
                      as.character(price),
                      sep=': $'))
@@ -134,8 +134,8 @@ pal_stroke <- colorFactor(mlb_secondary,
                           domain=mlb_teams)
 
 leaflet(df_leaflet) %>% setView(lng=-98.583,
-                            lat=39.833,
-                            zoom=4) %>% 
+                                lat=39.833,
+                                zoom=4) %>% 
   addProviderTiles(providers$OpenStreetMap.Mapnik) %>% 
   addCircles(lng=~Longitude, lat=~Latitude,
              weight=1, radius=~price*5000,
@@ -179,29 +179,12 @@ order <- c('Arizona D-backs',
            'Tampa Bay Rays',
            'Texas Rangers',
            'Toronto Blue Jays',
-           'Washington Nationals'))
+           'Washington Nationals')
 
-ui <- fluidPage(
+fluidPage(
   sliderTextInput(inputId='year', label='Year',
                   choices=years,
                   selected=max(years),
                   grid=T),
   leafletOutput(outputId='map')
 )
-server <- function(input, output) {
-  output$map = renderLeaflet({
-    leaflet() %>%
-      addProviderTiles(providers$OpenStreetMap.BlackAndWhite) %>% 
-      addCircles(data=df_leaflet[df_leaflet$year==input$year,],
-                 lng=~jitter(Longitude, factor=2),
-                 lat=~jitter(Latitude, factor=2),
-                 weight=1, 
-                 radius=~log(price)*50000,
-                 color=~pal(Teams),
-                 stroke=F, fillOpacity=.3,
-                 popup=~popup)
-  })
-}
-
-shinyApp(ui, server)
-#rsconnect::deployApp('')

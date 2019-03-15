@@ -63,13 +63,14 @@ g <- df_innings %>%
   scale_fill_brewer(type='qual', palette=2, 'Share') +
   scale_x_discrete(limits=c(1984,2014)) +
   theme(legend.title=element_blank())
-ggplotly(g) %>% 
+g_stacked <- ggplotly(g) %>% 
   add_annotations(text="Category",
                   xref="paper", yref="paper",
                   x=1.03, xanchor="left",
                   y=0.81, yanchor="bottom",
                   legendtitle=T, showarrow=F) %>%
   layout(legend=list(y=0.8, yanchor='top'))
+g_stacked
 
 # Slopegraph
 h <- df_innings %>%
@@ -110,10 +111,11 @@ h <- df_innings %>%
   scale_y_continuous(breaks=seq(0.1, 0.8, by=0.1)) +
   theme(legend.title=element_blank(),
         axis.title.x=element_text(size=20))
-ggplotly(h) %>% 
+h_slope <- ggplotly(h) %>% 
   add_annotations(text="Category",
                   xref="paper", yref="paper",
                   x=1.023, xanchor="left",
                   y=0.81, yanchor="bottom",
                   legendtitle=T, showarrow=F) %>%
   layout(legend=list(y=0.8, yanchor='top'))
+h_slope

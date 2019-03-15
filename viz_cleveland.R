@@ -127,7 +127,7 @@ g <- df_plot %>% merge(., team_stats,
                                 by=0.01)) +
   theme_eric() +
   theme(legend.title=element_blank())
-ggplotly(g, tooltip=c('Team',
+g_cleveland <- ggplotly(g, tooltip=c('Team',
                       'Statistic',
                       'Value')) %>% 
   add_annotations(text="Statistic",
@@ -138,3 +138,4 @@ ggplotly(g, tooltip=c('Team',
   layout(legend=list(y=0.8, yanchor='top'))
 
 # Average times and metrics in period 2014-2016
+g_cleveland
