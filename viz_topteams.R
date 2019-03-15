@@ -56,8 +56,8 @@ g <- df_prices %>%
   ggtitle('Which teams have the best ROI?') +
   coord_flip() +
   theme_eric()
-g
-ggplotly(g, tooltip=c('Team', 'Ratio', 'Price'))
+g_topteams <- ggplotly(g, tooltip=c('Team', 'Ratio', 'Price'))
+g_topteams
 
 # Make interactive, switch from 2011 to 2017, in shiny
 df_prices %>%

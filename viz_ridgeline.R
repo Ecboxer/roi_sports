@@ -68,6 +68,8 @@ g <- df_lens %>%
   geom_density_ridges2(scale=2) +
   fillscale +
   xlab('Time (min)') + ylab('') +
+  labs(title='Game lengths',
+       subtitle='2018 season') +
   theme_eric()
 g
 
@@ -84,5 +86,7 @@ h <- df_lens %>%
   geom_density_ridges2(scale=2, size=1) +
   fillscale + colscale +
   xlab('Time (min)') + ylab('') +
+  labs(title='Game lengths',
+       subtitle='2018 season') +
   theme_eric()
 h
