@@ -62,3 +62,4 @@ g <- df %>%
   theme_eric()
 g_prices <- ggplotly(g, tooltip=c('Team', 'Year', 'Price')) %>% 
   layout(title='Average ticket price')
+g_prices
