@@ -56,6 +56,7 @@ g <- df_prices %>%
   ggtitle('Which teams have the best ROI?') +
   coord_flip() +
   theme_eric()
+g
 g_topteams <- ggplotly(g, tooltip=c('Team', 'Ratio', 'Price'))
 g_topteams
 
