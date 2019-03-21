@@ -255,3 +255,34 @@ i_cleveland <- ggplotly(i, tooltip=c('Team',
                   legendtitle=T, showarrow=F) %>%
   layout(legend=list(y=0.8, yanchor='top'))
 i_cleveland
+
+# Heatmap of action metrics
+df_heatmap <- df_plot %>%
+  merge(., team_stats_14_18,
+                       by.x='team', by.y='teamIDBR') %>% 
+  select(Team=name,
+         `Share of runs per season`=R_prop_mu,
+         `Share of homeruns per season`=H_prop_mu,
+         `Share of strikeouts per season`=SO_prop_mu,
+         `Share of stolen bases per season`=SB_prop_mu) %>% 
+  dplyr::distinct(Team,
+                  `Share of runs per season`,
+                  `Share of homeruns per season`,
+                  `Share of strikeouts per season`,
+                  `Share of stolen bases per season`)
+df_heatmap <- df_heatmap[match(order,
+                               df_heatmap$Team),]
+
+rownames(df_heatmap) <- df_heatmap[,1]
+df_heatmap <- df_heatmap[,-1]
+matrix_heatmap <- as.matrix(df_heatmap)
+
+coul = colorRampPalette(brewer.pal(8, 'Reds'))(25)
+heatmap(matrix_heatmap, Colv=NA, Rowv=NA,
+        col=coul)
+
+plot_ly(x=colnames(matrix_heatmap),
+        y=rownames(matrix_heatmap),
+        z=matrix_heatmap,
+        type='heatmap',
+        colorscale='RdBu')
