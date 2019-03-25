@@ -7,6 +7,13 @@ library(plotly)
 
 df_prices <- read_csv('earlyticketprices.csv')
 df_prices %>% head()
+df_prices_2019 <- read_csv('mlb_2019_fan_cost_index.csv')
+df_prices_2019 <- df_prices_2019 %>%
+  select(Teams=Team,
+    `2019`=`Avg. Ticket`)
+df_prices_2019 %>% head()
+df_prices <- merge(df_prices, df_prices_2019,
+      by.x='Teams', by.y='Teams')
 
 df <- df_prices %>% select(-Division) %>%
   gather(key=year, value=price, -Teams)
@@ -57,9 +64,10 @@ g <- df %>%
                                 max(df$price, na.rm=T),
                                 by=10), 1)) +
   scale_x_continuous(breaks=round(seq(min(df$year_num),
-                                      max(df$year_num),
+                                      2020,
                                       by=5), 0)) +
   theme_eric()
+g
 g_prices <- ggplotly(g, tooltip=c('Team', 'Year', 'Price')) %>% 
   layout(title='Average ticket price')
 g_prices

@@ -11,6 +11,7 @@ action_dur <- action_dur$action_duration
 action_dur_min <- action_dur / 60
 
 df_prices <- read_csv('mlb_prices.csv')
+df_prices %>% head()
 df_prices <- df_prices %>% mutate(
   pr_2017 = as.numeric(gsub("\\$", "", `2017`)),
   pr_2011 = as.numeric(gsub("\\$", "", `2011`)),
@@ -20,9 +21,15 @@ df_prices <- df_prices %>% mutate(
   select(teams, pr_2017, pr_2011, perc_change)
 df_prices %>% head()
 
-df_prices %>% ggplot() +
-  geom_bar(aes(x=reorder(teams, pr_2017),
-               y=pr_2017/action_dur_min),
+df_prices_2019 <- read_csv('mlb_2019_fan_cost_index.csv')
+df_prices_2019 <- df_prices_2019 %>% 
+  select(teams=Team,
+         pr_2019=`Avg. Ticket`)
+df_prices_2019 %>% head()
+
+df_prices_2019 %>% ggplot() +
+  geom_bar(aes(x=reorder(teams, pr_2019),
+               y=pr_2019/action_dur_min),
            stat='identity') +
   coord_flip()
 df_prices %>% ggplot() +
@@ -38,12 +45,12 @@ mlb_colors <- teamcolors %>% filter(league=='mlb')
 fillscale <- scale_fill_manual(name='Teams',
                                values=mlb_colors$primary)
 
-g <- df_prices %>%
+g <- df_prices_2019 %>%
   select(Team=teams,
-         pr_2017) %>% 
-  mutate(Ratio=action_dur_min/pr_2017,
+         pr_2019) %>% 
+  mutate(Ratio=action_dur_min/pr_2019,
          Price=paste('$',
-                     as.character(pr_2017),
+                     as.character(pr_2019),
                      sep='')) %>% 
   ggplot(aes(label=Price)) +
   geom_bar(aes(x=reorder(Team, Ratio),
@@ -57,6 +64,7 @@ g <- df_prices %>%
   coord_flip() +
   theme_eric()
 g
+library(plotly)
 g_topteams <- ggplotly(g, tooltip=c('Team', 'Ratio', 'Price'))
 g_topteams
 

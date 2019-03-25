@@ -11,6 +11,13 @@ library(rsconnect)
 df_prices <- read_csv('earlyticketprices.csv')
 df_prices %>% head()
 df_stadiums <- read_csv('MLB Stadiums.csv')
+df_prices_2019 <- read_csv('mlb_2019_fan_cost_index.csv')
+df_prices_2019 <- df_prices_2019 %>%
+  select(Teams=Team,
+         `2019`=`Avg. Ticket`)
+df_prices_2019 %>% head()
+df_prices <- merge(df_prices, df_prices_2019,
+                   by.x='Teams', by.y='Teams')
 
 df <- df_prices %>% select(-Division) %>%
   gather(key=year, value=price, -Teams)
