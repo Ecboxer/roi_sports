@@ -276,6 +276,7 @@ df_heatmap <- df_heatmap[match(order,
 rownames(df_heatmap) <- df_heatmap[,1]
 df_heatmap <- df_heatmap[,-1]
 matrix_heatmap <- as.matrix(df_heatmap)
+matrix_heatmap_t <- t(matrix_heatmap)
 
 coul = colorRampPalette(brewer.pal(8, 'Reds'))(25)
 heatmap(matrix_heatmap, Colv=NA, Rowv=NA,
