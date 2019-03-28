@@ -71,3 +71,6 @@ g
 g_prices <- ggplotly(g, tooltip=c('Team', 'Year', 'Price')) %>% 
   layout(title='Average ticket price')
 g_prices
+
+ggsave(file='viz_prices.svg', plot=g,
+       width=20, height=8)
