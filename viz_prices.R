@@ -74,3 +74,13 @@ g_prices
 
 ggsave(file='viz_prices.svg', plot=g,
        width=20, height=8)
+
+# Write to csv
+df %>% 
+  select(Year=year_num,
+         Price=price,
+         id,
+         Team=Teams) %>% 
+  write_csv('viz_prices_long.csv')
+df_prices %>%
+  write_csv('viz_prices_wide.csv')
