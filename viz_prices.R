@@ -33,6 +33,8 @@ colscale <- scale_color_manual(name='Teams',
                    values=mlb_colors$primary)
 fillscale <- scale_fill_manual(name='Teams',
                                values=mlb_colors$secondary)
+#teamcolors %>% filter(league == 'mlb') %>%
+#  write_csv('team_colors.csv')
 df <- df %>% mutate(id=substr(Teams, 0, 3))
 df <- df %>% filter(year!='2001A') %>%
   mutate(year_num=as.numeric(year))
