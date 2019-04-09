@@ -46,7 +46,7 @@ df_innings %>%
          `Action`=`Seconds of Action`,
          `Other`=`Time of game`)
 
-g <- df_innings %>%
+g_stacked <- df_innings %>%
   filter(Inning==9) %>% 
   select(Year,
          `Commercials`=`Commercial time (game)`,
@@ -63,17 +63,17 @@ g <- df_innings %>%
   scale_fill_brewer(type='qual', palette=2, 'Share') +
   scale_x_discrete(limits=c(1984,2014)) +
   theme(legend.title=element_blank())
-g_stacked <- ggplotly(g) %>% 
+g_stacked_p <- ggplotly(g_stacked) %>% 
   add_annotations(text="Category",
                   xref="paper", yref="paper",
                   x=1.03, xanchor="left",
                   y=0.81, yanchor="bottom",
                   legendtitle=T, showarrow=F) %>%
   layout(legend=list(y=0.8, yanchor='top'))
-g_stacked
+g_stacked_p
 
 # Slopegraph
-h <- df_innings %>%
+h_slope <- df_innings %>%
   filter(Inning==9) %>% 
   select(Year,
          `Commercials`=`Commercial time (game)`,
@@ -111,11 +111,11 @@ h <- df_innings %>%
   scale_y_continuous(breaks=seq(0.1, 0.8, by=0.1)) +
   theme(legend.title=element_blank(),
         axis.title.x=element_text(size=20))
-h_slope <- ggplotly(h) %>% 
+h_slope_p <- ggplotly(h_slope) %>% 
   add_annotations(text="Category",
                   xref="paper", yref="paper",
                   x=1.023, xanchor="left",
                   y=0.81, yanchor="bottom",
                   legendtitle=T, showarrow=F) %>%
   layout(legend=list(y=0.8, yanchor='top'))
-h_slope
+h_slope_p

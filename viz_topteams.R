@@ -1,4 +1,5 @@
 library(tidyverse)
+library(plotly)
 library(Lahman)
 library(baseballr)
 library(teamcolors)
@@ -45,7 +46,7 @@ mlb_colors <- teamcolors %>% filter(league=='mlb')
 fillscale <- scale_fill_manual(name='Teams',
                                values=mlb_colors$primary)
 
-g <- df_prices_2019 %>%
+g_topteams <- df_prices_2019 %>%
   select(Team=teams,
          pr_2019) %>% 
   mutate(Ratio=action_dur_min/pr_2019,
@@ -63,12 +64,9 @@ g <- df_prices_2019 %>%
   ggtitle('Which teams have the best ROI?') +
   coord_flip() +
   theme_eric()
-g
-library(plotly)
-g_topteams <- ggplotly(g, tooltip=c('Team', 'Ratio', 'Price'))
 g_topteams
 
+g_topteams_p <- ggplotly(g_topteams, tooltip=c('Team', 'Ratio', 'Price'))
+g_topteams_p
+
 # Make interactive, switch from 2011 to 2017, in shiny
-df_prices %>%
-  gather(key=key, value=value,
-         -c(teams, perc_change))

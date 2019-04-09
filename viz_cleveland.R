@@ -208,6 +208,7 @@ h <- df_plot %>% merge(., team_stats_14_18,
   theme_eric() +
   theme(legend.title=element_blank())
 h
+
 # Write to svg
 # ggsave(file='viz_cleveland_metrics.svg', plot=h,
 #        width=40, height=20)

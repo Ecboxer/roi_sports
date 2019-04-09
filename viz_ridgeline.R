@@ -56,7 +56,7 @@ team_names <- Teams %>%
   filter(yearID==2016) %>% 
   select(teamIDBR, name)
 
-g <- df_lens %>%
+g_ridge <- df_lens %>%
   gather(key=team, value=time) %>% 
   merge(., team_names,
         by.x='team', by.y='teamIDBR') %>% 
@@ -71,10 +71,10 @@ g <- df_lens %>%
   labs(title='Game lengths',
        subtitle='2018 season') +
   theme_eric()
-g
+g_ridge
 
 # Secondary colors as color
-h <- df_lens %>%
+h_ridge <- df_lens %>%
   gather(key=team, value=time) %>% 
   merge(., team_names,
         by.x='team', by.y='teamIDBR') %>% 
@@ -89,4 +89,17 @@ h <- df_lens %>%
   labs(title='Game lengths',
        subtitle='2018 season') +
   theme_eric()
-h
+h_ridge
+
+# df_lens %>%
+#   gather(key=team, value=time) %>% 
+#   merge(., team_names,
+#         by.x='team', by.y='teamIDBR') %>% 
+#   mutate(time_min=time / 60) %>% 
+#   dplyr::select(name, time, time_min) %>% 
+#   dplyr::group_by(name) %>% 
+#   dplyr::summarise(mean_time_secs = mean(time,
+#                                          na.rm=T),
+#                    mean_time_min = mean(time_min,
+#                                         na.rm=T)) %>% 
+#   write_csv(path='avg_game_lengths.csv')

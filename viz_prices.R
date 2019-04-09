@@ -2,7 +2,6 @@ library(tidyverse)
 library(Lahman)
 library(baseballr)
 library(teamcolors)
-library(rbokeh)
 library(plotly)
 
 df_prices <- read_csv('earlyticketprices.csv')
@@ -39,7 +38,7 @@ df <- df %>% mutate(id=substr(Teams, 0, 3))
 df <- df %>% filter(year!='2001A') %>%
   mutate(year_num=as.numeric(year))
 
-g <- df %>% 
+g_prices <- df %>% 
   select(Year=year_num,
          Price=price,
          id,
@@ -69,20 +68,24 @@ g <- df %>%
                                       2020,
                                       by=5), 0)) +
   theme_eric()
-g
-g_prices <- ggplotly(g, tooltip=c('Team', 'Year', 'Price')) %>% 
-  layout(title='Average ticket price')
 g_prices
+g_prices_p <- ggplotly(g_prices,
+                       tooltip=c('Team', 'Year', 'Price')) %>% 
+  layout(title='Average ticket price')
+g_prices_p
 
-ggsave(file='viz_prices.svg', plot=g,
-       width=20, height=8)
+# Marlins lowering ticket prices for 2019
+# https://www.usatoday.com/story/sports/mlb/marlins/2018/08/27/miami-marlins-ticket-strategy-prices/1108305002/
 
-# Write to csv
-df %>% 
-  select(Year=year_num,
-         Price=price,
-         id,
-         Team=Teams) %>% 
-  write_csv('viz_prices_long.csv')
-df_prices %>%
-  write_csv('viz_prices_wide.csv')
+# ggsave(file='viz_prices.svg', plot=g,
+#        width=20, height=8)
+# 
+# # Write to csv
+# df %>% 
+#   select(Year=year_num,
+#          Price=price,
+#          id,
+#          Team=Teams) %>% 
+#   write_csv('viz_prices_long.csv')
+# df_prices %>%
+#   write_csv('viz_prices_wide.csv')
